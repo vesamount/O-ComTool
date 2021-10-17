@@ -1,6 +1,5 @@
 # O-Comtool
 
-![l_IUV8bODji6Ykb_GV5opSNeGlloQLde8MvxEiBNT0A](http://www.ifreehub.com/image_bed/upload/l_IUV8bODji6Ykb_GV5opSNeGlloQLde8MvxEiBNT0A.png)
 ![image](http://www.ifreehub.com/image_bed/upload//l_IUV8bODji6Ykb_GV5opSNeGlloQLde8MvxEiBNT0A.png)
 
 O-Comtool是一款简单易用的串口调试助手，本软件提供了丰富的功能，有效提高嵌入式开发调试的效率。
