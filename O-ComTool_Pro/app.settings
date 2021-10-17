@@ -1,0 +1,178 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="O_ComTool_Pro" GeneratedClassName="app">
+  <Profiles />
+  <Settings>
+    <Setting Name="cmbBaudRate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">9600</Value>
+    </Setting>
+    <Setting Name="cmbDataBitIndex" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="cmbParityBitIndex" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="cmbStopBitIndex" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="cmbFlowCtrlIndex" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="receEncodeAscii" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="sendEncodeAscii" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="chkAutoLine" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="chkShowTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="chkAutoReply" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AutoReplyDelay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="chkAutoCount" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="chkAppendNewLine" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="chkRepeatSend" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="RepeatInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="GeneralSendData" Type="System.String" Scope="User">
+      <Value Profile="(Default)">www.ifreehub.com</Value>
+    </Setting>
+    <Setting Name="LoadFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MinToTray" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CloseToTray" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LastCheckTime" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2018-11-21 23:22:00</Value>
+    </Setting>
+    <Setting Name="ReceBackColor1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">39, 40, 34</Value>
+    </Setting>
+    <Setting Name="ReceForeColor1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">248, 248, 242</Value>
+    </Setting>
+    <Setting Name="SendBackColor1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">39, 40, 34</Value>
+    </Setting>
+    <Setting Name="SendForeColor1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">248, 248, 242</Value>
+    </Setting>
+    <Setting Name="ReceFont1" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Consolas, 10.5pt</Value>
+    </Setting>
+    <Setting Name="SendFont1" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Consolas, 10.5pt</Value>
+    </Setting>
+    <Setting Name="QuickSendCount" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="QuickSendTitle" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Title1&lt;/string&gt;
+  &lt;string&gt;Title2&lt;/string&gt;
+  &lt;string&gt;Title3&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="QuickSendData" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Data1&lt;/string&gt;
+  &lt;string&gt;Data2&lt;/string&gt;
+  &lt;string&gt;Data3&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="SkipVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuitConfirm" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HightLightEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FrameInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="LoadFileEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CommentEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ReceBackColor2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">248, 248, 242</Value>
+    </Setting>
+    <Setting Name="ReceForeColor2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">39, 40, 34</Value>
+    </Setting>
+    <Setting Name="SendBackColor2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">248, 248, 242</Value>
+    </Setting>
+    <Setting Name="SendForeColor2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">39, 40, 34</Value>
+    </Setting>
+    <Setting Name="ReceFont2" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Consolas, 10.5pt</Value>
+    </Setting>
+    <Setting Name="SendFont2" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Consolas, 10.5pt</Value>
+    </Setting>
+    <Setting Name="DisplayPlan1Enable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SendDisplayEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ReceSendRate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="chkTimeNewLine" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="HighLightRed" Type="System.String" Scope="User">
+      <Value Profile="(Default)">([^A-Za-z_&amp;-]((bad|wrong|incorrect|improper|invalid|unsupported|bad)( file| memory)? (descriptor|alloc(ation)?|addr(ess)?|owner(ship)?|arg(ument)?|param(eter)?|setting|length|filename)|not properly|improperly|(operation |connection |authentication |access |permission )?(denied|disallowed|not allowed|refused|problem|failed|failure|not permitted)|no [A-Za-z]+( [A-Za-z]+)? found|invalid|unsupported|not supported|seg(mentation )?fault|corruption|corrupted|corrupt|overflow|underrun|not ok|unimplemented|unsuccessfull|not implemented|permerrors?|fehlers?|errore|errors?|erreurs?|fejl|virhe|grea|erro|fel|\(ee\)|\(ni\))[^A-Za-z_-])</Value>
+    </Setting>
+    <Setting Name="HighLightGreen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">([^A-Za-z_&amp;-](ok|accepted|allowed|enabled|connected|erfolgreich|exitoso|successo|sucedido|successfully|successful|succeeded|success)[^A-Za-z_-])</Value>
+    </Setting>
+    <Setting Name="HighLightYellow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[^A-Za-z_&amp;-](\[\-w[A-Za-z-]+\]|caught signal [0-9]+|cannot|(connection (to (remote host|[a-z0-9.]+) )?)?(closed|terminated|stopped|not responding)|exited|no more [A-Za-z] available|unexpected|(command |binary |file )?not found|(o)+ps|out of (space|memory)|low (memory|disk)|unknown|disabled|disconnected|deprecated|refused|disconnect(ion)?|advertencia|avvertimento|attention|warnings?|achtung|exclamation|alerts?|warnungs?|advarsel|pedwarn|aviso|varoitus|upozorenje|peringatan|uyari|varning|avertissement|\(ww\)|\(\?\?\)|could not|unable to)[^A-Za-z_-]</Value>
+    </Setting>
+    <Setting Name="HighLightBlue" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[^A-Za-z_&amp;-](debug|test)[^A-Za-z_-]</Value>
+    </Setting>
+    <Setting Name="HighLightMagenta" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[^0-9A-Za-z_&amp;-](localhost|([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-4])\.[0-9]+\.[0-9]+\.[0-9]+|null|none)[^0-9A-Za-z_-]</Value>
+    </Setting>
+    <Setting Name="HighLightCyan" Type="System.String" Scope="User">
+      <Value Profile="(Default)">[^A-Za-z_&amp;-](last (failed )?login:|launching|checking|loading|creating|building|important|booting|starting|notice|informational|informationen|informazioni|informaction|oplysninger|informations?|info|informaction|informasi|note|\(ii\)|\(\!\!\))[^A-Za-z_-]</Value>
+    </Setting>
+    <Setting Name="HighLightOrange" Type="System.String" Scope="User">
+      <Value Profile="(Default)">([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]):([0-9][0-9][0-9]-(&lt;|&gt;))</Value>
+    </Setting>
+    <Setting Name="Send2FileEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Send2NewLineEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

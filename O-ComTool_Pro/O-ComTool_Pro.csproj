@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64A6B582-C0EB-460F-BEC1-A768C80831B7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O_ComTool_Pro</RootNamespace>
+    <AssemblyName>O-ComTool_Pro</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo48.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FastColoredTextBox, Version=2.16.25.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>app.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ASCII.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ASCII.Designer.cs">
+      <DependentUpon>ASCII.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Check.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check.Designer.cs">
+      <DependentUpon>Check.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckUpdate.Designer.cs">
+      <DependentUpon>CheckUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Donate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Donate.Designer.cs">
+      <DependentUpon>Donate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Format.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Format.Designer.cs">
+      <DependentUpon>Format.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HightLightRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HightLightRichTextBox.Designer.cs">
+      <DependentUpon>HightLightRichTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HttpWebRequestHelper.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Note.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Note.Designer.cs">
+      <DependentUpon>Note.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Option.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Option.Designer.cs">
+      <DependentUpon>Option.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O_ScrollBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="O_ScrollBar.Designer.cs">
+      <DependentUpon>O_ScrollBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickSend.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QuickSend.Designer.cs">
+      <DependentUpon>QuickSend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Update.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Update.Designer.cs">
+      <DependentUpon>Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateHelper.cs" />
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ASCII.resx">
+      <DependentUpon>ASCII.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Check.resx">
+      <DependentUpon>Check.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckUpdate.resx">
+      <DependentUpon>CheckUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Donate.resx">
+      <DependentUpon>Donate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Format.resx">
+      <DependentUpon>Format.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Note.resx">
+      <DependentUpon>Note.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Option.resx">
+      <DependentUpon>Option.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="QuickSend.resx">
+      <DependentUpon>QuickSend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Update.resx">
+      <DependentUpon>Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>app.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Import_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Export_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Log Cabin_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Exit_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Check_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Calculator_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Device Manager_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Format_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BackGround_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ASC_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Updates_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\About_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Donate_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\File_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tools_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Help_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Connect_Red_50px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Led_Red_50px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sleep_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Disconnected_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Home_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Send_Clear_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rec_Clear_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Change_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Replace_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sub_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add Tag_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Change Theme_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Connected_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Led_Green_50px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReplaceDown_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddDown_52px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SubDown_52px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AsciiTable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AliPay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WechatPay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AliPay1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WechatPay1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FastColoredTextBox.dll" />
+    <None Include="bin\Release\FastColoredTextBox.dll" />
+    <Content Include="Logo48.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
