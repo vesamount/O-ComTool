@@ -3,22 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:local="clr-namespace:O_ComTool.App"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="O-ComTool" Height="820" Width="1240" MinWidth="1040" MinHeight="640"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize"
         Background="{DynamicResource Brush.Window}"
         Foreground="{DynamicResource Brush.Text}"
-        FontFamily="Segoe UI" FontSize="13"
+        FontFamily="Microsoft YaHei UI" FontSize="13"
+        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType"
         UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
     <Window.Resources>
         <local:InverseBooleanConverter x:Key="Inverse"/>
+        <Style x:Key="CaptionButton" TargetType="Button">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Text}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Brush.Hover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CloseCaptionButton" TargetType="Button" BasedOn="{StaticResource CaptionButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Brush.Danger}"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
+    <Border x:Name="WindowFrame" BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="1">
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Margin="6,6,12,0">
+        <Grid DockPanel.Dock="Top" Height="40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Menu VerticalAlignment="Center">
+            <Menu Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6,0,0,0"
+                  Background="Transparent" shell:WindowChrome.IsHitTestVisibleInChrome="True">
             <MenuItem Header="文件">
                 <MenuItem Header="导入配置..." Click="Import_Click"/>
                 <MenuItem Header="导出配置..." Click="Export_Click"/>
@@ -44,8 +92,18 @@
                 <MenuItem Header="关于" Click="About_Click"/>
             </MenuItem>
             </Menu>
-            <Button Grid.Column="1" Content="切换配色" Click="Theme_Click" Style="{StaticResource PrimaryButton}"
-                    Padding="14,5" Margin="12,0,0,0" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" IsHitTestVisible="False">
+                <Image Source="pack://application:,,,/Assets/Logo48.ico" Width="20" Height="20" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"
+                           VerticalAlignment="Center" Foreground="{DynamicResource Brush.Text}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button Content="切换配色" Click="Theme_Click" Style="{StaticResource PrimaryButton}"
+                        Padding="12,4" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <Button Content="—" Click="Minimize_Click" Style="{StaticResource CaptionButton}" ToolTip="最小化"/>
+                <Button x:Name="MaxButton" Content="□" Click="Maximize_Click" Style="{StaticResource CaptionButton}" ToolTip="最大化"/>
+                <Button Content="✕" Click="Close_Click" Style="{StaticResource CloseCaptionButton}" ToolTip="关闭"/>
+            </StackPanel>
         </Grid>
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Brush.Status}"
                 BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="0,1,0,0" Padding="16,8">
@@ -151,11 +209,16 @@
                         <CheckBox Content="自动换行" IsChecked="{Binding AutoLine}"/>
                         <CheckBox Content="显示时间" IsChecked="{Binding ShowTime}"/>
                         <CheckBox Content="时间后换行" IsChecked="{Binding TimeNewLine}"/>
-                        <DockPanel Margin="0,4,0,0">
-                            <TextBox Text="{Binding AutoReplyDelay}" Width="56" DockPanel.Dock="Right" VerticalAlignment="Center"/>
-                            <TextBlock Text="ms" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="6,0" Foreground="{DynamicResource Brush.Muted}"/>
-                            <CheckBox Content="自动回复" IsChecked="{Binding AutoReply}" VerticalAlignment="Center" Margin="0"/>
-                        </DockPanel>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Content="自动回复" IsChecked="{Binding AutoReply}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left"/>
+                            <TextBox Grid.Column="1" Text="{Binding AutoReplyDelay}" Width="56" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
+                        </Grid>
 
                         <TextBlock Text="发送" Style="{StaticResource SectionTitle}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
@@ -168,11 +231,16 @@
                         <CheckBox Content="发送回显" IsChecked="{Binding SendDisplayEnable}"/>
                         <CheckBox Content="回显写入日志" IsChecked="{Binding SendToFileEnable}"/>
                         <CheckBox Content="发送时滚到末尾" IsChecked="{Binding SendToNewLineEnable}"/>
-                        <DockPanel Margin="0,4,0,0">
-                            <TextBox Text="{Binding RepeatInterval}" Width="56" DockPanel.Dock="Right" VerticalAlignment="Center"/>
-                            <TextBlock Text="ms" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="6,0" Foreground="{DynamicResource Brush.Muted}"/>
-                            <CheckBox Content="重复发送" IsChecked="{Binding RepeatSend}" VerticalAlignment="Center" Margin="0"/>
-                        </DockPanel>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Content="重复发送" IsChecked="{Binding RepeatSend}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left"/>
+                            <TextBox Grid.Column="1" Text="{Binding RepeatInterval}" Width="56" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
+                        </Grid>
 
                         <TextBlock Text="报文文件" Style="{StaticResource SectionTitle}"/>
                         <Button Content="加载文件" Click="LoadFile_Click" HorizontalAlignment="Left" Padding="12,5"/>
@@ -240,7 +308,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="34"/>
-                                        <ColumnDefinition Width="78"/>
+                                        <ColumnDefinition Width="112"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -264,4 +332,5 @@
             </Border>
         </Grid>
     </DockPanel>
+    </Border>
 </Window>

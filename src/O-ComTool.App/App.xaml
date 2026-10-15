@@ -135,7 +135,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-                        <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid MinHeight="22" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -173,7 +173,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid MinHeight="22" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>

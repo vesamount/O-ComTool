@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 using O_ComTool.Core.Config;
 
 namespace O_ComTool.App
@@ -27,7 +28,8 @@ namespace O_ComTool.App
             {
                 window.SetResourceReference(Window.BackgroundProperty, "Brush.Window");
                 window.SetResourceReference(Window.ForegroundProperty, "Brush.Text");
-                window.FontFamily = new System.Windows.Media.FontFamily("Segoe UI");
+                window.FontFamily = new System.Windows.Media.FontFamily("Microsoft YaHei UI");
+                TextOptions.SetTextFormattingMode(window, TextFormattingMode.Display);
             }
 
             ThemeChrome.ApplyTitle(window);

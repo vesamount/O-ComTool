@@ -56,10 +56,44 @@ namespace O_ComTool.App
         protected override void OnStateChanged(EventArgs e)
         {
             base.OnStateChanged(e);
-            if (WindowState == WindowState.Minimized && _viewModel.MinToTray)
+            bool maximized = WindowState == WindowState.Maximized;
+            WindowFrame.Padding = maximized ? new Thickness(7) : new Thickness(0);
+            MaxButton.Content = maximized ? "❐" : "□";
+            MaxButton.ToolTip = maximized ? "还原" : "最大化";
+            if (_viewModel != null && WindowState == WindowState.Minimized && _viewModel.MinToTray)
             {
                 HideToTray();
             }
+        }
+
+        /**
+         * @brief 最小化主窗口
+         * @param sender: 标题栏最小化按钮
+         * @param e: 路由事件参数
+         */
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        /**
+         * @brief 在最大化和还原之间切换
+         * @param sender: 标题栏最大化按钮
+         * @param e: 路由事件参数
+         */
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        /**
+         * @brief 请求关闭主窗口
+         * @param sender: 标题栏关闭按钮
+         * @param e: 路由事件参数
+         */
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

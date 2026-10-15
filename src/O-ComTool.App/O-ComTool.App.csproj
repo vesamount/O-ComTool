@@ -16,6 +16,9 @@
     <Resource Include="..\..\O-ComTool_Pro\Resources\WechatPay1.png">
       <Link>Assets\WechatPay1.png</Link>
     </Resource>
+    <Resource Include="..\..\O-ComTool_Pro\Logo48.ico">
+      <Link>Assets\Logo48.ico</Link>
+    </Resource>
   </ItemGroup>
 
   <PropertyGroup>
