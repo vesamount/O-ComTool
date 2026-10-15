@@ -271,10 +271,6 @@
                             <TextBox Grid.Column="1" Text="{Binding RepeatInterval}" Width="80" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
                         </Grid>
-
-                        <TextBlock Text="报文文件" Style="{StaticResource SectionTitle}"/>
-                        <Button Content="加载文件" Click="LoadFile_Click" HorizontalAlignment="Left" Padding="12,5"/>
-                        <ComboBox ItemsSource="{Binding PacketLines}" SelectionChanged="Packet_SelectionChanged" Margin="0,8,0,0"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>
@@ -301,9 +297,19 @@
                     <Button DockPanel.Dock="Right" Content="清空" Command="{Binding ClearSendCommand}" Padding="12,5"/>
                     <TextBlock Text="发送" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Muted}" FontWeight="SemiBold"/>
                 </DockPanel>
-                <TextBox x:Name="SendBox" Grid.Row="3" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                         FontFamily="Consolas" FontSize="{Binding SendFontSize}" Padding="10"
-                         Text="{Binding GeneralSendData, UpdateSourceTrigger=PropertyChanged}"/>
+                <DockPanel Grid.Row="3">
+                    <Grid DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="加载文件" Click="LoadFile_Click" Padding="12,5" Margin="0,0,8,0"/>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding PacketLines}" SelectionChanged="Packet_SelectionChanged" VerticalAlignment="Center"/>
+                    </Grid>
+                    <TextBox x:Name="SendBox" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                             FontFamily="Consolas" FontSize="{Binding SendFontSize}" Padding="10"
+                             Text="{Binding GeneralSendData, UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
             </Grid>
 
             <Button x:Name="QuickRail" Grid.Column="2" Visibility="Collapsed" Click="ToggleQuick_Click" ToolTip="展开快捷发送"
