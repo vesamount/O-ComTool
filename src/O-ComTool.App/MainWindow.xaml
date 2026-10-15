@@ -150,13 +150,13 @@
         </Border>
         <Grid Margin="12">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="268"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition x:Name="QuickColumn" Width="390"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,10,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel>
+                    <StackPanel Grid.IsSharedSizeScope="True">
                         <TextBlock Text="串口" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
                         <DockPanel Margin="0,3">
                             <TextBlock Text="端口" Style="{StaticResource FieldLabel}"/>
@@ -202,13 +202,28 @@
                         <Button Content="{Binding OpenButtonText}" Command="{Binding ToggleOpenCommand}" Style="{StaticResource OpenButton}" Margin="0,12,0,8" HorizontalAlignment="Stretch"/>
 
                         <TextBlock Text="接收" Style="{StaticResource SectionTitle}"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <RadioButton Content="ASCII" IsChecked="{Binding ReceiveAscii}" Margin="0,0,16,0"/>
-                            <RadioButton Content="HEX" IsChecked="{Binding ReceiveAscii, Converter={StaticResource Inverse}}"/>
-                        </StackPanel>
-                        <CheckBox Content="自动换行" IsChecked="{Binding AutoLine}"/>
-                        <CheckBox Content="显示时间" IsChecked="{Binding ShowTime}"/>
-                        <CheckBox Content="时间后换行" IsChecked="{Binding TimeNewLine}"/>
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol1"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol2"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Content="ASCII" IsChecked="{Binding ReceiveAscii}" HorizontalAlignment="Left"/>
+                            <RadioButton Grid.Column="1" Content="HEX" IsChecked="{Binding ReceiveAscii, Converter={StaticResource Inverse}}" HorizontalAlignment="Left"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol1"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol2"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Content="自动换行" IsChecked="{Binding AutoLine}" Margin="0,3,12,3"/>
+                            <CheckBox x:Name="AutoSaveBox" Grid.Column="1" Content="自动保存" Margin="0,3,0,3" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" IsChecked="{Binding AutoSave, Mode=OneWay}"/>
+                            <CheckBox Grid.Row="1" Content="显示时间" IsChecked="{Binding ShowTime}" Margin="0,3,12,3"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Content="时间后换行" IsChecked="{Binding TimeNewLine}" Margin="0,3,0,3"/>
+                        </Grid>
                         <Grid Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -216,22 +231,36 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Content="自动回复" IsChecked="{Binding AutoReply}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left"/>
-                            <TextBox Grid.Column="1" Text="{Binding AutoReplyDelay}" Width="56" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding AutoReplyDelay}" Width="80" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
                         </Grid>
-                        <CheckBox x:Name="AutoSaveBox" Content="自动保存" Margin="0,4,0,0" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" IsChecked="{Binding AutoSave, Mode=OneWay}"/>
 
                         <TextBlock Text="发送" Style="{StaticResource SectionTitle}"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <RadioButton Content="ASCII" IsChecked="{Binding SendAscii}" Margin="0,0,16,0"/>
-                            <RadioButton Content="HEX" IsChecked="{Binding SendAscii, Converter={StaticResource Inverse}}"/>
-                        </StackPanel>
-                        <CheckBox Content="自动计数" IsChecked="{Binding AutoCount}"/>
-                        <CheckBox Content="追加换行" IsChecked="{Binding AppendNewLine}"/>
-                        <CheckBox Content="// 注释" IsChecked="{Binding CommentEnable}"/>
-                        <CheckBox Content="发送回显" IsChecked="{Binding SendDisplayEnable}"/>
-                        <CheckBox Content="回显写入日志" IsChecked="{Binding SendToFileEnable}"/>
-                        <CheckBox Content="发送时滚到末尾" IsChecked="{Binding SendToNewLineEnable}"/>
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol1"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol2"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Content="ASCII" IsChecked="{Binding SendAscii}" HorizontalAlignment="Left"/>
+                            <RadioButton Grid.Column="1" Content="HEX" IsChecked="{Binding SendAscii, Converter={StaticResource Inverse}}" HorizontalAlignment="Left"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol1"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="OptionCol2"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Content="自动计数" IsChecked="{Binding AutoCount}" Margin="0,3,12,3"/>
+                            <CheckBox Grid.Column="1" Content="追加换行" IsChecked="{Binding AppendNewLine}" Margin="0,3,0,3"/>
+                            <CheckBox Grid.Row="1" Content="// 注释" IsChecked="{Binding CommentEnable}" Margin="0,3,12,3"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Content="发送回显" IsChecked="{Binding SendDisplayEnable}" Margin="0,3,0,3"/>
+                            <CheckBox Grid.Row="2" Content="回显写入日志" IsChecked="{Binding SendToFileEnable}" Margin="0,3,12,3"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Content="发送时滚到末尾" IsChecked="{Binding SendToNewLineEnable}" Margin="0,3,0,3"/>
+                        </Grid>
                         <Grid Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -239,7 +268,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Content="重复发送" IsChecked="{Binding RepeatSend}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left"/>
-                            <TextBox Grid.Column="1" Text="{Binding RepeatInterval}" Width="56" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding RepeatInterval}" Width="80" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
                         </Grid>
 

@@ -31,9 +31,9 @@ namespace O_ComTool.Core.Config
 
         public bool ReceiveAscii { get; set; } = true;
 
-        public bool AutoLine { get; set; }
+        public bool AutoLine { get; set; } = true;
 
-        public bool ShowTime { get; set; }
+        public bool ShowTime { get; set; } = true;
 
         public bool AutoReply { get; set; }
 
