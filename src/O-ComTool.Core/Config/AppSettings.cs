@@ -55,6 +55,8 @@ namespace O_ComTool.Core.Config
 
         public string LoadFilePath { get; set; } = string.Empty;
 
+        public string LogFolder { get; set; } = string.Empty;
+
         public bool MinToTray { get; set; }
 
         public bool CloseToTray { get; set; }

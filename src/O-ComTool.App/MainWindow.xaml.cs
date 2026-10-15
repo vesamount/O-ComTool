@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -376,27 +377,31 @@ namespace O_ComTool.App
                 return;
             }
 
-            var dialog = new SaveFileDialog
+            var dialog = new OpenFolderDialog
             {
-                Filter = "文本文件|*.txt|所有文件|*.*",
-                FileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "-Log.txt",
+                Title = "选择自动保存文件夹",
+                InitialDirectory = Directory.Exists(_viewModel.LogFolder) ? _viewModel.LogFolder : string.Empty,
             };
             if (dialog.ShowDialog(this) == true)
             {
-                _viewModel.BeginLog(dialog.FileName);
+                string file = Path.Combine(dialog.FolderName, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
+                _viewModel.LogFolder = dialog.FolderName;
+                _viewModel.BeginLog(file);
+                _viewModel.WriteSnapshot(ReceiveEditor.Text);
+                AutoSaveBox.ToolTip = file;
             }
-            else if (sender is CheckBox box)
+            else
             {
-                box.IsChecked = false;
+                AutoSaveBox.IsChecked = false;
             }
         }
 
         private void AutoSave_Unchecked(object sender, RoutedEventArgs e)
         {
-    if (_viewModel?.AutoSave == true)
-    {
-        _viewModel.EndLog();
-    }
+            if (_viewModel?.AutoSave == true)
+            {
+                _viewModel.EndLog();
+            }
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)

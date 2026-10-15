@@ -70,6 +70,8 @@ namespace O_ComTool.App.ViewModels
 
         public string? LogPath { get; private set; }
 
+        public string LogFolder { get; set; } = string.Empty;
+
         public event Action? ClearReceiveRequested;
 
         public event Action? HighlightReloaded;
@@ -167,6 +169,7 @@ namespace O_ComTool.App.ViewModels
             GeneralSendData = settings.GeneralSendData;
             LoadFileEnable = settings.LoadFileEnable;
             LoadFilePath = settings.LoadFilePath;
+            LogFolder = settings.LogFolder;
             MinToTray = settings.MinToTray;
             CloseToTray = settings.CloseToTray;
             QuitConfirm = settings.QuitConfirm;
@@ -244,6 +247,7 @@ namespace O_ComTool.App.ViewModels
                 GeneralSendData = GeneralSendData,
                 LoadFileEnable = LoadFileEnable,
                 LoadFilePath = LoadFilePath,
+                LogFolder = LogFolder,
                 MinToTray = MinToTray,
                 CloseToTray = CloseToTray,
                 QuitConfirm = QuitConfirm,
@@ -341,10 +345,28 @@ namespace O_ComTool.App.ViewModels
         {
             EndLog();
             var stream = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read);
-            _log = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+            _log = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true)) { AutoFlush = true };
             LogPath = path;
             AutoSave = true;
             SetStatus(true, path);
+        }
+
+        /**
+         * @brief 把接收区里已经显示的内容写入当前日志
+         * @param text: 接收区全文
+         */
+        public void WriteSnapshot(string text)
+        {
+            if (_log == null || string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            _log.Write(AnsiParser.Strip(text));
+            if (!text.EndsWith('\n'))
+            {
+                _log.WriteLine();
+            }
         }
 
         /**

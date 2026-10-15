@@ -219,6 +219,7 @@
                             <TextBox Grid.Column="1" Text="{Binding AutoReplyDelay}" Width="56" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource Brush.Muted}"/>
                         </Grid>
+                        <CheckBox x:Name="AutoSaveBox" Content="自动保存" Margin="0,4,0,0" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" IsChecked="{Binding AutoSave, Mode=OneWay}"/>
 
                         <TextBlock Text="发送" Style="{StaticResource SectionTitle}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
@@ -245,7 +246,6 @@
                         <TextBlock Text="报文文件" Style="{StaticResource SectionTitle}"/>
                         <Button Content="加载文件" Click="LoadFile_Click" HorizontalAlignment="Left" Padding="12,5"/>
                         <ComboBox ItemsSource="{Binding PacketLines}" SelectionChanged="Packet_SelectionChanged" Margin="0,8,0,0"/>
-                        <CheckBox Content="自动保存日志" Margin="0,10,0,0" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" IsChecked="{Binding AutoSave, Mode=OneWay}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>
