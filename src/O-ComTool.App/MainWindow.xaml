@@ -57,7 +57,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border x:Name="WindowFrame" BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="1">
+    <Border x:Name="WindowFrame" CornerRadius="8" ClipToBounds="True" BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="1">
     <DockPanel>
         <Grid DockPanel.Dock="Top" Height="40">
             <Grid.ColumnDefinitions>

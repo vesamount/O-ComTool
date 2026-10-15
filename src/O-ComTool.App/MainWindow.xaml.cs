@@ -59,6 +59,8 @@ namespace O_ComTool.App
             base.OnStateChanged(e);
             bool maximized = WindowState == WindowState.Maximized;
             WindowFrame.Padding = maximized ? new Thickness(7) : new Thickness(0);
+            WindowFrame.CornerRadius = maximized ? new CornerRadius(0) : new CornerRadius(8);
+            ThemeChrome.ApplyRoundCorners(this);
             MaxButton.Content = maximized ? "❐" : "□";
             MaxButton.ToolTip = maximized ? "还原" : "最大化";
             if (_viewModel != null && WindowState == WindowState.Minimized && _viewModel.MinToTray)

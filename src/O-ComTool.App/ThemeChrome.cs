@@ -82,6 +82,24 @@ namespace O_ComTool.App
             int text = dark ? ColorRef("#F8F8F2") : ColorRef("#2C2D27");
             DwmSetWindowAttribute(hwnd, 35, ref caption, sizeof(int));
             DwmSetWindowAttribute(hwnd, 36, ref text, sizeof(int));
+            ApplyRoundCorners(window);
+        }
+
+        /**
+         * @brief 把窗口四角收成圆角，最大化时铺满屏幕
+         * @param window: 目标窗口
+         */
+        public static void ApplyRoundCorners(Window window)
+        {
+            IntPtr hwnd = new WindowInteropHelper(window).Handle;
+            if (hwnd == IntPtr.Zero)
+            {
+                return;
+            }
+
+            // 33 = DWMWA_WINDOW_CORNER_PREFERENCE，2 = 圆角，1 = 直角
+            int preference = window.WindowState == WindowState.Maximized ? 1 : 2;
+            DwmSetWindowAttribute(hwnd, 33, ref preference, sizeof(int));
         }
 
         private static void Set(ResourceDictionary resources, string key, string hex)
