@@ -1,0 +1,38 @@
+<Window x:Class="O_ComTool.App.Views.DonateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="O-ComTool 捐赠" Width="500" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False"
+        Background="{DynamicResource Brush.Window}" Foreground="{DynamicResource Brush.Text}"
+        FontFamily="Microsoft YaHei" FontSize="14">
+    <StackPanel Margin="24,18,24,20">
+        <TextBlock Text="嘿 朋友！！！" FontSize="20" FontWeight="Bold"/>
+        <TextBlock Margin="0,12,0,0" FontWeight="SemiBold" TextWrapping="Wrap"
+                   Text="开发不易，如果这个软件对您有帮助，不妨请作者吃个包子吧！"/>
+        <TextBlock Margin="0,6,0,0" FontWeight="SemiBold" TextWrapping="Wrap">
+            <Run Text="如不方便，也可支付宝搜索”"/>
+            <Run Text="9795782" Foreground="{DynamicResource Brush.Danger}"/>
+            <Run Text="“领取大红包！"/>
+        </TextBlock>
+        <TextBlock Margin="0,6,0,0" FontWeight="SemiBold" TextWrapping="Wrap"
+                   Text="您的支持是作者不断更新、维护的动力，非常感谢！"/>
+        <Grid Margin="8,18,8,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center">
+                <Border Background="#FFFFFF" CornerRadius="4" Padding="6">
+                    <Image Source="pack://application:,,,/Assets/AliPay1.png" Width="156" Height="156" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="支付宝" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,10,0,0"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                <Border Background="#FFFFFF" CornerRadius="4" Padding="6">
+                    <Image Source="pack://application:,,,/Assets/WechatPay1.png" Width="156" Height="156" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="微信" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,10,0,0"/>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

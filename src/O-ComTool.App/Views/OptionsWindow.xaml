@@ -1,0 +1,49 @@
+<Window x:Class="O_ComTool.App.Views.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="选项" Height="640" Width="460" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{DynamicResource Brush.Window}" Foreground="{DynamicResource Brush.Text}" FontFamily="Segoe UI">
+    <DockPanel Margin="12">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="打开高亮配置" Width="120" Margin="0,0,8,0" Click="OpenHighlight_Click"/>
+            <Button Content="确定" Width="80" Margin="0,0,8,0" IsDefault="True" Click="Ok_Click"/>
+            <Button Content="取消" Width="80" IsCancel="True"/>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="窗口" FontWeight="Bold"/>
+                <CheckBox Content="最小化到托盘" IsChecked="{Binding MinToTray}" Margin="0,4"/>
+                <CheckBox Content="关闭到托盘" IsChecked="{Binding CloseToTray}"/>
+                <CheckBox Content="退出前确认" IsChecked="{Binding QuitConfirm}" Margin="0,4"/>
+                <TextBlock Text="收发" FontWeight="Bold" Margin="0,12,0,0"/>
+                <CheckBox Content="启用 // 注释" IsChecked="{Binding CommentEnable}" Margin="0,4"/>
+                <CheckBox Content="启用关键字高亮" IsChecked="{Binding HighlightEnable}"/>
+                <CheckBox Content="启动时加载报文文件" IsChecked="{Binding LoadFileEnable}" Margin="0,4"/>
+                <DockPanel Margin="0,4">
+                    <TextBlock Text="帧间隔 (ms)" VerticalAlignment="Center" Width="120"/>
+                    <TextBox Text="{Binding FrameInterval}" Width="80" HorizontalAlignment="Left"/>
+                </DockPanel>
+                <TextBlock Text="配色方案 1（深色）" FontWeight="Bold" Margin="0,12,0,4"/>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="接收前景"/><TextBox Text="{Binding ReceiveForeground1}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="接收背景"/><TextBox Text="{Binding ReceiveBackground1}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="发送前景"/><TextBox Text="{Binding SendForeground1}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="发送背景"/><TextBox Text="{Binding SendBackground1}"/></DockPanel>
+                <TextBlock Text="配色方案 2（浅色）" FontWeight="Bold" Margin="0,12,0,4"/>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="接收前景"/><TextBox Text="{Binding ReceiveForeground2}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="接收背景"/><TextBox Text="{Binding ReceiveBackground2}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="发送前景"/><TextBox Text="{Binding SendForeground2}"/></DockPanel>
+                <DockPanel Margin="0,2"><TextBlock Width="140" Text="发送背景"/><TextBox Text="{Binding SendBackground2}"/></DockPanel>
+                <DockPanel Margin="0,8,0,0">
+                    <TextBlock Width="140" Text="接收字号" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding ReceiveFontSize}" Width="80" HorizontalAlignment="Left"/>
+                </DockPanel>
+                <DockPanel Margin="0,4">
+                    <TextBlock Width="140" Text="发送字号" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding SendFontSize}" Width="80" HorizontalAlignment="Left"/>
+                </DockPanel>
+                <TextBlock TextWrapping="Wrap" Margin="0,12,0,0" Foreground="#666"
+                           Text="高亮颜色写在 highlight.json，格式与 VS Code 的 settings.json 类似。保存后接收区会重新着色。"/>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

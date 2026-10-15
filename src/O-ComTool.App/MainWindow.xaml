@@ -1,0 +1,267 @@
+﻿<Window x:Class="O_ComTool.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:local="clr-namespace:O_ComTool.App"
+        Title="O-ComTool" Height="820" Width="1240" MinWidth="1040" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Brush.Window}"
+        Foreground="{DynamicResource Brush.Text}"
+        FontFamily="Segoe UI" FontSize="13"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Window.Resources>
+        <local:InverseBooleanConverter x:Key="Inverse"/>
+    </Window.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Margin="6,6,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Menu VerticalAlignment="Center">
+            <MenuItem Header="文件">
+                <MenuItem Header="导入配置..." Click="Import_Click"/>
+                <MenuItem Header="导出配置..." Click="Export_Click"/>
+                <Separator/>
+                <MenuItem Header="退出" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="工具">
+                <MenuItem Header="校验" Click="Check_Click"/>
+                <MenuItem Header="HEX 格式化" Click="Format_Click"/>
+                <MenuItem Header="ASCII 表" Click="Ascii_Click"/>
+                <Separator/>
+                <MenuItem Header="计算器" Click="Calc_Click"/>
+                <MenuItem Header="设备管理器" Click="DeviceManager_Click"/>
+                <MenuItem Header="打开日志位置" Click="OpenLog_Click"/>
+                <Separator/>
+                <MenuItem Header="窗口备注" Click="Note_Click"/>
+                <MenuItem Header="选项" Click="Options_Click"/>
+            </MenuItem>
+            <MenuItem Header="帮助">
+                <MenuItem Header="检查更新" Click="Update_Click"/>
+                <MenuItem Header="主页" Click="Home_Click"/>
+                <MenuItem Header="捐赠" Click="Donate_Click"/>
+                <MenuItem Header="关于" Click="About_Click"/>
+            </MenuItem>
+            </Menu>
+            <Button Grid.Column="1" Content="切换配色" Click="Theme_Click" Style="{StaticResource PrimaryButton}"
+                    Padding="14,5" Margin="12,0,0,0" VerticalAlignment="Center"/>
+        </Grid>
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Brush.Status}"
+                BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="0,1,0,0" Padding="16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="9" Height="9" Margin="0,0,8,0" VerticalAlignment="Center">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="#E06C75"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ReceiveActive}" Value="True">
+                                        <Setter Property="Fill" Value="#A6E22E"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <TextBlock Text="{Binding PortStatus}" VerticalAlignment="Center" MinWidth="180"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="{Binding TxText}" Click="CountMode_Click" Style="{StaticResource LinkButton}"/>
+                    <Button Content="{Binding RxText}" Click="CountMode_Click" Style="{StaticResource LinkButton}"/>
+                    <TextBlock Text="{Binding RateText}" VerticalAlignment="Center" Margin="8,0" Foreground="{DynamicResource Brush.Muted}" MinWidth="48"/>
+                    <Button Content="清零" Click="ResetCount_Click" Style="{StaticResource LinkButton}"/>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="{Binding StatusText}" VerticalAlignment="Center" MinWidth="120" TextAlignment="Right">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.Danger}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StatusOk}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Border>
+        <Grid Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="268"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="QuickColumn" Width="390"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,10,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock Text="串口" Style="{StaticResource SectionTitle}" Margin="0,0,0,8"/>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="端口" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox ItemsSource="{Binding Ports}" SelectedItem="{Binding PortName}" IsEditable="True" DropDownOpened="Ports_DropDownOpened"/>
+                        </DockPanel>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="波特率" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox IsEditable="True" Text="{Binding BaudRate, UpdateSourceTrigger=PropertyChanged}" x:Name="BaudBox"/>
+                        </DockPanel>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="数据位" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox SelectedIndex="{Binding DataBitIndex}">
+                                <ComboBoxItem Content="5"/>
+                                <ComboBoxItem Content="6"/>
+                                <ComboBoxItem Content="7"/>
+                                <ComboBoxItem Content="8"/>
+                            </ComboBox>
+                        </DockPanel>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="校验" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox SelectedIndex="{Binding ParityIndex}">
+                                <ComboBoxItem Content="None"/>
+                                <ComboBoxItem Content="Even"/>
+                                <ComboBoxItem Content="Odd"/>
+                            </ComboBox>
+                        </DockPanel>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="停止位" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox SelectedIndex="{Binding StopBitIndex}">
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="1.5"/>
+                            </ComboBox>
+                        </DockPanel>
+                        <DockPanel Margin="0,3">
+                            <TextBlock Text="流控" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox SelectedIndex="{Binding FlowControlIndex}">
+                                <ComboBoxItem Content="None"/>
+                                <ComboBoxItem Content="XOn/XOff"/>
+                                <ComboBoxItem Content="RTS/CTS"/>
+                            </ComboBox>
+                        </DockPanel>
+                        <Button Content="{Binding OpenButtonText}" Command="{Binding ToggleOpenCommand}" Style="{StaticResource OpenButton}" Margin="0,12,0,8" HorizontalAlignment="Stretch"/>
+
+                        <TextBlock Text="接收" Style="{StaticResource SectionTitle}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <RadioButton Content="ASCII" IsChecked="{Binding ReceiveAscii}" Margin="0,0,16,0"/>
+                            <RadioButton Content="HEX" IsChecked="{Binding ReceiveAscii, Converter={StaticResource Inverse}}"/>
+                        </StackPanel>
+                        <CheckBox Content="自动换行" IsChecked="{Binding AutoLine}"/>
+                        <CheckBox Content="显示时间" IsChecked="{Binding ShowTime}"/>
+                        <CheckBox Content="时间后换行" IsChecked="{Binding TimeNewLine}"/>
+                        <DockPanel Margin="0,4,0,0">
+                            <TextBox Text="{Binding AutoReplyDelay}" Width="56" DockPanel.Dock="Right" VerticalAlignment="Center"/>
+                            <TextBlock Text="ms" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="6,0" Foreground="{DynamicResource Brush.Muted}"/>
+                            <CheckBox Content="自动回复" IsChecked="{Binding AutoReply}" VerticalAlignment="Center" Margin="0"/>
+                        </DockPanel>
+
+                        <TextBlock Text="发送" Style="{StaticResource SectionTitle}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <RadioButton Content="ASCII" IsChecked="{Binding SendAscii}" Margin="0,0,16,0"/>
+                            <RadioButton Content="HEX" IsChecked="{Binding SendAscii, Converter={StaticResource Inverse}}"/>
+                        </StackPanel>
+                        <CheckBox Content="自动计数" IsChecked="{Binding AutoCount}"/>
+                        <CheckBox Content="追加换行" IsChecked="{Binding AppendNewLine}"/>
+                        <CheckBox Content="// 注释" IsChecked="{Binding CommentEnable}"/>
+                        <CheckBox Content="发送回显" IsChecked="{Binding SendDisplayEnable}"/>
+                        <CheckBox Content="回显写入日志" IsChecked="{Binding SendToFileEnable}"/>
+                        <CheckBox Content="发送时滚到末尾" IsChecked="{Binding SendToNewLineEnable}"/>
+                        <DockPanel Margin="0,4,0,0">
+                            <TextBox Text="{Binding RepeatInterval}" Width="56" DockPanel.Dock="Right" VerticalAlignment="Center"/>
+                            <TextBlock Text="ms" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="6,0" Foreground="{DynamicResource Brush.Muted}"/>
+                            <CheckBox Content="重复发送" IsChecked="{Binding RepeatSend}" VerticalAlignment="Center" Margin="0"/>
+                        </DockPanel>
+
+                        <TextBlock Text="报文文件" Style="{StaticResource SectionTitle}"/>
+                        <Button Content="加载文件" Click="LoadFile_Click" HorizontalAlignment="Left" Padding="12,5"/>
+                        <ComboBox ItemsSource="{Binding PacketLines}" SelectionChanged="Packet_SelectionChanged" Margin="0,8,0,0"/>
+                        <CheckBox Content="自动保存日志" Margin="0,10,0,0" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" IsChecked="{Binding AutoSave, Mode=OneWay}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2.1*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <DockPanel Margin="2,2,2,8">
+                    <Button DockPanel.Dock="Right" Content="下一个" Click="Find_Click" Margin="6,0,0,0" Padding="12,5"/>
+                    <Button DockPanel.Dock="Right" Content="清空" Command="{Binding ClearReceiveCommand}" Padding="12,5"/>
+                    <TextBox x:Name="SearchBox" ToolTip="在接收区查找"/>
+                </DockPanel>
+                <Border Grid.Row="1" BorderBrush="{DynamicResource Brush.PanelBorder}" BorderThickness="1" CornerRadius="10" ClipToBounds="True">
+                    <avalonEdit:TextEditor x:Name="ReceiveEditor" FontFamily="Consolas" FontSize="{Binding ReceiveFontSize}"
+                                           IsReadOnly="True" WordWrap="True" ShowLineNumbers="False"
+                                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                </Border>
+                <DockPanel Grid.Row="2" Margin="2,12,2,8">
+                    <Button DockPanel.Dock="Right" Content="发送" Command="{Binding SendCommand}" IsEnabled="{Binding CanSend}" Style="{StaticResource PrimaryButton}" MinWidth="88" Margin="8,0,0,0"/>
+                    <Button DockPanel.Dock="Right" Content="清空" Command="{Binding ClearSendCommand}" Padding="12,5"/>
+                    <TextBlock Text="发送" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Muted}" FontWeight="SemiBold"/>
+                </DockPanel>
+                <TextBox x:Name="SendBox" Grid.Row="3" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         FontFamily="Consolas" FontSize="{Binding SendFontSize}" Padding="10"
+                         Text="{Binding GeneralSendData, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+
+            <Button x:Name="QuickRail" Grid.Column="2" Visibility="Collapsed" Click="ToggleQuick_Click" ToolTip="展开快捷发送"
+                    Background="{DynamicResource Brush.Panel}" BorderBrush="{DynamicResource Brush.PanelBorder}"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="12,16" Cursor="Hand">
+                <StackPanel>
+                    <TextBlock Text="▸" HorizontalAlignment="Center" Foreground="{DynamicResource Brush.Accent}" FontSize="16" Margin="0,0,0,10"/>
+                    <TextBlock Text="快捷发送" HorizontalAlignment="Center" Foreground="{DynamicResource Brush.Accent}" FontWeight="SemiBold">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+            <Border x:Name="QuickPanel" Grid.Column="2" Style="{StaticResource Card}">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <Button DockPanel.Dock="Right" Content="添加" Command="{Binding AddQuickSendCommand}" Padding="12,4"/>
+                        <Button Click="ToggleQuick_Click" Style="{StaticResource LinkButton}" HorizontalAlignment="Left" Padding="0,2" ToolTip="收起快捷发送">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="▾" Margin="0,0,6,0" Foreground="{DynamicResource Brush.Accent}" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Text="快捷发送" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}"/>
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                    <ListBox ItemsSource="{Binding QuickSends}" HorizontalContentAlignment="Stretch"
+                             VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+                             ScrollViewer.CanContentScroll="True">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="78"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding IndexText}" VerticalAlignment="Center" FontFamily="Consolas" FontSize="12"
+                                               Foreground="{DynamicResource Brush.Muted}"/>
+                                    <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0" Padding="6,3"/>
+                                    <TextBox Grid.Column="2" Text="{Binding Data, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0" Padding="6,3"/>
+                                    <Button Grid.Column="3" Content="发送" Padding="8,3" Margin="0,0,4,0"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Command="{Binding DataContext.SendQuickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
+                                    <Button Grid.Column="4" Content="×" Padding="8,3" FontSize="14"
+                                            Command="{Binding DataContext.RemoveQuickSendCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
