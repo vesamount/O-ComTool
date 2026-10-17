@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\O-ComTool.Core\O-ComTool.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\O-ComTool_Pro\Resources\AliPay1.png">
+      <Link>Assets\AliPay1.png</Link>
+    </Resource>
+    <Resource Include="..\..\O-ComTool_Pro\Resources\WechatPay1.png">
+      <Link>Assets\WechatPay1.png</Link>
+    </Resource>
+    <Resource Include="..\..\O-ComTool_Pro\Logo48.ico">
+      <Link>Assets\Logo48.ico</Link>
+    </Resource>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>O_ComTool.App</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Version>3.0.0</Version>
+    <FileVersion>3.0.0.0</FileVersion>
+    <InformationalVersion>3.0.0</InformationalVersion>
+    <AssemblyName>O-ComTool</AssemblyName>
+    <ApplicationIcon>..\..\O-ComTool_Pro\Logo48.ico</ApplicationIcon>
+  </PropertyGroup>
+
+</Project>
