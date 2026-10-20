@@ -12,6 +12,7 @@ namespace O_ComTool.App.Editor
     public sealed class ColorRunStore
     {
         private readonly List<ColorRun> _runs = new();
+        private int _maxRuns = 50000;  // 最大颜色条目数
 
         /**
          * @brief 追加一段新文本上的颜色
@@ -34,6 +35,12 @@ namespace O_ComTool.App.Editor
 
                 _runs.Add(run with { Start = baseOffset + run.Start });
             }
+
+            // 如果超出限制,移除旧的颜色数据(只保留最近的)
+            while (_runs.Count > _maxRuns)
+            {
+                _runs.RemoveAt(0);
+            }
         }
 
         /**
@@ -42,6 +49,19 @@ namespace O_ComTool.App.Editor
         public void Clear()
         {
             _runs.Clear();
+        }
+
+        /**
+         * @brief 设置最大颜色条目数
+         * @param maxCount: 最大条目数
+         */
+        public void SetMaxEntries(int maxCount)
+        {
+            _maxRuns = maxCount;
+            while (_runs.Count > maxCount)
+            {
+                _runs.RemoveAt(0);
+            }
         }
 
         /**

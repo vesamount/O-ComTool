@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,6 +24,9 @@ namespace O_ComTool.App
         private readonly System.Windows.Forms.NotifyIcon _tray = new();
         private int _findIndex;
         private bool _exitRequested;
+        private bool _isClosing = false;  // 标记是否正在关闭
+        private const int MaxLines = 80000;  // 最大行数限制
+        private const int TrimThreshold = 100000; // 触发裁剪的阈值
 
         public MainWindow(ConfigStore store, AppSettings settings)
         {
@@ -101,37 +105,58 @@ namespace O_ComTool.App
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (_exitRequested)
+            // 设置关闭标志,停止数据处理
+            _isClosing = true;
+            
+            // 第一次关闭请求,检查是否需要提示确认
+            if (!_exitRequested)
             {
-                PersistAndClose();
-                base.OnClosing(e);
-                return;
-            }
-
-            if (_viewModel.CloseToTray)
-            {
-                e.Cancel = true;
-                HideToTray();
-                return;
-            }
-
-            if (_viewModel.QuitConfirm)
-            {
-                if (!ThemedDialog.Confirm(this, "确认退出当前串口工具？", "O-ComTool 确认"))
+                // 检查是否需要关闭串口和提示确认
+                if (_viewModel.CloseToTray)
                 {
                     e.Cancel = true;
+                    _isClosing = false;  // 取消关闭,重置标志
+                    HideToTray();
                     return;
                 }
-            }
 
-            PersistAndClose();
-            base.OnClosing(e);
+                if (_viewModel.QuitConfirm)
+                {
+                    var result = ThemedDialog.Confirm(this, "确认退出当前串口工具?", "O-ComTool 确认");
+                    if (!result)
+                    {
+                        e.Cancel = true;
+                        _isClosing = false;  // 取消关闭,重置标志
+                        _exitRequested = false;
+                        return;
+                    }
+                }
+
+                // 用户确认后,设置退出标志
+                _exitRequested = true;
+                // 允许窗口继续关闭(不cancel,让自然流程完成)
+                return;
+            }
+            
+            // 第二次关闭(用户已确认),直接关闭
+            try
+            {
+                _viewModel.Dispose();
+            }
+            catch
+            {
+                // Ignore disposal errors during close
+            }
+            
+            // 最后清理托盘图标
+            _tray.Visible = false;
+            _tray.Dispose();
         }
 
         private void PersistAndClose()
         {
             _viewModel.Save();
-            _viewModel.Dispose();
+            // Dispose 已经在 OnClosing 中调用,这里只需要清理托盘图标
             _tray.Visible = false;
             _tray.Dispose();
         }
@@ -171,14 +196,108 @@ namespace O_ComTool.App
 
         private void AppendChunk(DisplayChunk chunk, bool forceScroll)
         {
+            // 如果正在关闭,不再处理新数据
+            if (_isClosing)
+            {
+                return;
+            }
+            
             TextEditor editor = ReceiveEditor;
-            bool nearEnd = editor.ExtentHeight - editor.VerticalOffset - editor.ViewportHeight < 48;
-            int offset = editor.Document.TextLength;
+            
+            // 计算是否在底部附近(更宽松的阈值)
+            bool nearEnd = false;
+            if (editor.Document != null)
+            {
+                double totalHeight = editor.ExtentHeight;
+                double viewHeight = editor.ViewportHeight;
+                double currentOffset = editor.VerticalOffset;
+                
+                // 如果文档高度小于视图高度,肯定在底部
+                if (totalHeight <= viewHeight)
+                {
+                    nearEnd = true;
+                }
+                else
+                {
+                    // 距离底部小于 100 像素就认为是接近底部
+                    nearEnd = (totalHeight - currentOffset - viewHeight) < 100;
+                }
+            }
+            
+            int offset = editor.Document?.TextLength ?? 0;
+            
+            // 检查是否需要裁剪旧数据
+            if (ShouldTrim(editor))
+            {
+                TrimOldData(editor);
+                offset = 0;
+                _colorizer.Store.Clear();
+                nearEnd = true; // 裁剪后强制滚动到底部
+            }
+            
             _colorizer.Store.Add(offset, chunk.Runs);
-            editor.Document.Insert(offset, chunk.Text);
+            editor.Document?.Insert(offset, chunk.Text);
+            
+            // 如果接近底部或强制滚动,则滚动到底部
             if (nearEnd || forceScroll)
             {
                 editor.ScrollToEnd();
+            }
+        }
+
+        /// <summary>
+        /// /// 判断是否需要裁剪旧数据
+        /// </summary>
+        private bool ShouldTrim(TextEditor editor)
+        {
+            var document = editor.Document;
+            return document != null && document.LineCount >= MaxLines;
+        }
+
+        /// <summary>
+        /// /// 裁剪旧数据,保留新数据
+        /// </summary>
+        private void TrimOldData(TextEditor editor)
+        {
+            var document = editor.Document;
+            if (document == null)
+            {
+                return;
+            }
+
+            // 计算要删除的行数(删除多余的部分,保留MaxLines/2行)
+            int linesToRemove = document.LineCount - MaxLines / 2;
+            if (linesToRemove <= 0)
+            {
+                return;
+            }
+
+            // 找到要删除的最后一行的结束位置
+            int trimEnd = document.Lines[linesToRemove].EndOffset;
+
+            // 删除旧数据
+            document.Remove(0, trimEnd);
+            
+            // 同时清理日志文件中的旧数据
+            if (!string.IsNullOrEmpty(_viewModel.LogPath) && System.IO.File.Exists(_viewModel.LogPath))
+            {
+                try
+                {
+                    string[] lines = System.IO.File.ReadAllLines(_viewModel.LogPath, Encoding.UTF8);
+                    int keepLines = lines.Length / 2;
+                    if (keepLines > 0)
+                    {
+                        System.IO.File.WriteAllLines(_viewModel.LogPath, lines.Skip(keepLines), Encoding.UTF8);
+                    }
+                    else
+                    {
+                        System.IO.File.WriteAllText(_viewModel.LogPath, "", Encoding.UTF8);
+                    }
+                }
+                catch
+                {
+                    // 忽略日志文件写入错误
+                }
             }
         }
 

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
+using System.Threading.Channels;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,12 +23,15 @@ namespace O_ComTool.App.ViewModels
         private readonly DispatcherTimer _repeatTimer;
         private readonly DispatcherTimer _replyTimer;
         private readonly DispatcherTimer _ledTimer;
+        private readonly Channel<DisplayChunk> _receiveChannel;
+        private Task? _receiveProcessor;
         private StreamWriter? _log;
         private int _sequence;
         private int _txBytes;
         private int _rxBytes;
         private int _txFrames;
         private int _rxFrames;
+        private const int MaxReceiveLines = 50000;  // 最大保留行数
 
         public MainViewModel(ConfigStore store, AppSettings settings)
         {
@@ -51,6 +55,15 @@ namespace O_ComTool.App.ViewModels
                 _ledTimer.Stop();
             };
             ApplySettings(settings, reloadHighlight: true);
+            
+            // 创建通道用于缓冲接收数据
+            _receiveChannel = Channel.CreateUnbounded<DisplayChunk>(new UnboundedChannelOptions
+            {
+                SingleReader = true,
+                SingleWriter = false
+            });
+            _receiveProcessor = ProcessReceiveChannel();
+            
             store.WatchHighlight(() => _ui.Post(_ =>
             {
                 ReloadHighlight();
@@ -75,6 +88,11 @@ namespace O_ComTool.App.ViewModels
         public event Action? ClearReceiveRequested;
 
         public event Action? HighlightReloaded;
+
+        /// <summary>
+        /// /// 已处理的总字节数(用于统计)
+        /// </summary>
+        public long TotalProcessedBytes { get; private set; }
 
         [ObservableProperty] private string _portName = string.Empty;
         [ObservableProperty] private string _baudRate = "9600";
@@ -580,12 +598,40 @@ namespace O_ComTool.App.ViewModels
          */
         public void Dispose()
         {
-            _repeatTimer.Stop();
-            _replyTimer.Stop();
-            _ledTimer.Stop();
-            _session.Dispose();
-            EndLog();
-            _store.Dispose();
+            try
+            {
+                _repeatTimer.Stop();
+                _replyTimer.Stop();
+                _ledTimer.Stop();
+                
+                // 立即关闭串口,停止数据接收
+                _session.Dispose();
+                
+                // 安全地关闭通道和处理程序
+                if (_receiveChannel != null)
+                {
+                    try
+                    {
+                        _receiveChannel.Writer.Complete();
+                    }
+                    catch
+                    {
+                        // Channel may already be closed, ignore
+                    }
+                    
+                    _receiveProcessor = null;
+                }
+                
+                // 关闭日志
+                EndLog();
+                
+                // 最后清理配置
+                _store.Dispose();
+            }
+            catch (Exception)
+            {
+                // 忽略所有异常,确保关闭成功
+            }
         }
 
         partial void OnRepeatSendChanged(bool value)
@@ -688,7 +734,14 @@ namespace O_ComTool.App.ViewModels
             RefreshCounters();
             DisplayChunk chunk = DisplayText.FormatReceive(data, ReceiveAscii, ShowTime, TimeNewLine, AutoLine);
             WriteLog(chunk.Text);
-            ChunkReady?.Invoke(chunk, false);
+            
+            // 写入通道进行异步处理
+            if (!_receiveChannel.Writer.TryWrite(chunk))
+            {
+                // 如果通道满了,在后台线程格式化并直接发送
+                Task.Run(() => FormatAndSendBackground(chunk));
+            }
+            
             ReceiveActive = true;
             _ledTimer.Stop();
             _ledTimer.Start();
@@ -697,6 +750,35 @@ namespace O_ComTool.App.ViewModels
                 _replyTimer.Interval = TimeSpan.FromMilliseconds(Math.Max(1, AutoReplyDelay));
                 _replyTimer.Start();
             }
+        }
+
+        /// <summary>
+        /// /// 后台线程处理通道中的数据
+        /// </summary>
+        private async Task ProcessReceiveChannel()
+        {
+            await foreach (DisplayChunk chunk in _receiveChannel.Reader.ReadAllAsync())
+            {
+                FormatAndSend(chunk);
+            }
+        }
+
+        /// <summary>
+        /// /// 后台格式化并发送到UI线程
+        /// </summary>
+        private void FormatAndSendBackground(DisplayChunk chunk)
+        {
+            FormatAndSend(chunk);
+        }
+
+        /// <summary>
+        /// /// 将chunk发送到UI线程
+        /// </summary>
+        private void FormatAndSend(DisplayChunk chunk)
+        {
+            TotalProcessedBytes += chunk.Text.Length;
+            // 接收数据时自动滚动到底部
+            ChunkReady?.Invoke(chunk, true);
         }
 
         private void OnSerialError(Exception exception)
