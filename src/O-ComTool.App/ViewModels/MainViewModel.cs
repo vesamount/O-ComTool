@@ -309,7 +309,14 @@ namespace O_ComTool.App.ViewModels
          */
         public void SaveSettings()
         {
-            _store.SaveSettings(CaptureSettings());
+            try
+            {
+                _store.SaveSettings(CaptureSettings());
+            }
+            catch (Exception)
+            {
+                // 配置写入失败时继续运行
+            }
         }
 
         /**
@@ -317,10 +324,18 @@ namespace O_ComTool.App.ViewModels
          */
         public void Save()
         {
-            HighlightFile highlight = _store.LoadHighlight();
-            highlight.Enable = HighlightEnable;
-            _store.SaveHighlight(highlight);
             SaveSettings();
+            try
+            {
+                HighlightFile highlight = _store.LoadHighlight();
+                highlight.Enable = HighlightEnable;
+                _store.SaveHighlight(highlight);
+            }
+            catch (Exception)
+            {
+                // 高亮文件写入失败时仍保留界面设置
+            }
+
             ReloadHighlight();
             HighlightReloaded?.Invoke();
         }

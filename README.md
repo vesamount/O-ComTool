@@ -26,7 +26,7 @@ O-Comtool 是一款简单易用的串口调试助手。当前版本用 .NET 10 W
 * 快捷发送最多 100 条，可增删、改名、单条发送，侧栏可以收起并记住展开/收起状态
 * 接收区可勾选自动保存，按文件夹把日志落到磁盘
 * 支持软件名称备注，轻松区别多个串口设备
-* 界面设置保存在 `%AppData%/O-ComTool/settings.json`，仍可导入、导出旧版 ini
+* 界面设置保存在 `%AppData%/O-ComTool/settings.json`，串口参数、接收/发送选项和快捷发送栏状态退出时自动保存，仍可导入、导出旧版 ini
 * 深色界面，右上角可切换浅色方案
 * 更有校验、HEX 格式化、ASCII 表等小工具
 * 校验小工具的 CRC 模型参数与 [metools.info 在线 CRC 校验工具](https://www.metools.info/code/c15.html) 一致

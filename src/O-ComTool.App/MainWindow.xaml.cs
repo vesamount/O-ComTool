@@ -25,6 +25,7 @@ namespace O_ComTool.App
         private readonly System.Windows.Forms.NotifyIcon _tray = new();
         private int _findIndex;
         private bool _exitRequested;
+        private bool _persisted;
         private bool _isClosing = false;  // 标记是否正在关闭
         private const int MaxLines = 80000;  // 最大行数限制
         private const int TrimThreshold = 100000; // 触发裁剪的阈值
@@ -137,11 +138,31 @@ namespace O_ComTool.App
 
                 // 用户确认后,设置退出标志
                 _exitRequested = true;
-                // 允许窗口继续关闭(不cancel,让自然流程完成)
+            }
+
+            PersistAndClose();
+        }
+
+        /**
+         * @brief 退出前保存界面设置并释放串口资源
+         */
+        private void PersistAndClose()
+        {
+            if (_persisted)
+            {
                 return;
             }
-            
-            // 第二次关闭(用户已确认),直接关闭
+
+            _persisted = true;
+            try
+            {
+                _viewModel.Save();
+            }
+            catch
+            {
+                // 配置写入失败也要继续关闭
+            }
+
             try
             {
                 _viewModel.Dispose();
@@ -150,16 +171,8 @@ namespace O_ComTool.App
             {
                 // Ignore disposal errors during close
             }
-            
-            // 最后清理托盘图标
-            _tray.Visible = false;
-            _tray.Dispose();
-        }
 
-        private void PersistAndClose()
-        {
-            _viewModel.Save();
-            // Dispose 已经在 OnClosing 中调用,这里只需要清理托盘图标
+            // 最后清理托盘图标
             _tray.Visible = false;
             _tray.Dispose();
         }
@@ -177,6 +190,7 @@ namespace O_ComTool.App
 
         private void HideToTray()
         {
+            _viewModel.SaveSettings();
             _tray.Visible = true;
             ShowInTaskbar = false;
             Hide();
