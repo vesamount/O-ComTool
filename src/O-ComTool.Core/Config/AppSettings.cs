@@ -79,6 +79,8 @@ namespace O_ComTool.Core.Config
 
         public bool DisplayPlan1 { get; set; } = true;
 
+        public bool QuickPanelCollapsed { get; set; }
+
         public string ReceiveForeground1 { get; set; } = "#F8F8F2";
 
         public string ReceiveBackground1 { get; set; } = "#272822";

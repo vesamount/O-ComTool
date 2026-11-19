@@ -1,0 +1,119 @@
+<Window x:Class="O_ComTool.App.Views.CheckWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="校验工具" Width="760" Height="640" MinWidth="680" MinHeight="580"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock Text="输入数据" Style="{StaticResource SectionTitle}" Margin="0" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <RadioButton x:Name="HexMode" Content="HEX" GroupName="InputMode" Margin="0,0,14,0"
+                                     Checked="InputMode_Changed"/>
+                        <RadioButton x:Name="AsciiMode" Content="ASCII" GroupName="InputMode" IsChecked="True"
+                                     Checked="InputMode_Changed"/>
+                    </StackPanel>
+                </DockPanel>
+                <TextBox x:Name="InputBox" Height="90" Margin="0,4,0,0" AcceptsReturn="True" TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto" FontFamily="Cascadia Mono, Consolas"
+                         Text="123456789" KeyDown="Input_KeyDown"/>
+                <TextBlock x:Name="InputHint" Foreground="{DynamicResource Brush.Muted}" FontSize="11" Margin="0,6,0,0"
+                           TextWrapping="Wrap" Text="ASCII：按 UTF-8 编码取字节，可直接输入中文。" />
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,10,0,0">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock Text="校验算法" Style="{StaticResource FieldLabel}" Width="64"/>
+                    <ComboBox x:Name="AlgorithmBox" HorizontalAlignment="Left" MinWidth="320" MaxWidth="480"
+                              SelectionChanged="Algorithm_Changed"/>
+                </DockPanel>
+                <Grid x:Name="CrcParamsPanel" Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,18,6">
+                            <TextBlock Text="宽度" Foreground="{DynamicResource Brush.Muted}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <ComboBox x:Name="WidthBox" Width="70" SelectionChanged="Width_Changed"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,18,6">
+                            <TextBlock Text="多项式" Foreground="{DynamicResource Brush.Muted}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="PolyBox" Width="110" FontFamily="Cascadia Mono, Consolas" TextChanged="ParamText_Changed"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,18,6">
+                            <TextBlock Text="初值" Foreground="{DynamicResource Brush.Muted}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="InitBox" Width="110" FontFamily="Cascadia Mono, Consolas" TextChanged="ParamText_Changed"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,18,6">
+                            <TextBlock Text="结果异或" Foreground="{DynamicResource Brush.Muted}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="XorOutBox" Width="110" FontFamily="Cascadia Mono, Consolas" TextChanged="ParamText_Changed"/>
+                        </StackPanel>
+                    </WrapPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,2,0,0">
+                        <CheckBox x:Name="RefInBox" Content="输入反转 REFIN" Checked="Ref_Changed" Unchecked="Ref_Changed"/>
+                        <CheckBox x:Name="RefOutBox" Content="输出反转 REFOUT" Checked="Ref_Changed" Unchecked="Ref_Changed"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" x:Name="ParamHint" Foreground="{DynamicResource Brush.Muted}" FontSize="11"
+                               TextWrapping="Wrap" Margin="0,4,0,0"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,10,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <DockPanel>
+                    <TextBlock Text="计算结果" Style="{StaticResource SectionTitle}" Margin="0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="InputInfo" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Brush.Muted}" FontSize="11"/>
+                </DockPanel>
+                <DockPanel Grid.Row="1" Margin="0,6,0,0">
+                    <Button DockPanel.Dock="Right" Content="复制" Click="Copy_Click" Padding="14,4"
+                            VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="HEX" Foreground="{DynamicResource Brush.Muted}" FontSize="11" Width="42" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ResultHex" FontFamily="Cascadia Mono, Consolas" FontSize="26"
+                                   Foreground="{DynamicResource Brush.Accent}" Text="0x0000"/>
+                    </StackPanel>
+                </DockPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,2,0,0">
+                    <TextBlock Text="BIN" Foreground="{DynamicResource Brush.Muted}" FontSize="11" Width="42" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="ResultBin" FontFamily="Cascadia Mono, Consolas" Text="0000 0000"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,2,0,0">
+                    <TextBlock Text="字节" Foreground="{DynamicResource Brush.Muted}" FontSize="11" Width="42" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="ResultBytes" FontFamily="Cascadia Mono, Consolas" Text="00"/>
+                </StackPanel>
+                <TextBlock Grid.Row="4" x:Name="ParamSummary" TextWrapping="Wrap" Foreground="{DynamicResource Brush.Muted}"
+                           FontSize="11" Margin="0,10,0,0"/>
+                <TextBlock Grid.Row="5" x:Name="StatusText" Foreground="{DynamicResource Brush.Muted}"
+                           FontSize="11" Margin="0,4,0,0"/>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="清空" Click="Clear_Click" Margin="0,0,8,0"/>
+            <Button Content="计算" Style="{StaticResource PrimaryButton}" Click="Calculate_Click" IsDefault="True" MinWidth="96"/>
+        </StackPanel>
+    </Grid>
+</Window>

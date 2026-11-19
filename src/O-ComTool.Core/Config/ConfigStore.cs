@@ -25,6 +25,7 @@ namespace O_ComTool.Core.Config
             Directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "O-ComTool");
             SettingsPath = Path.Combine(Directory, "settings.json");
             HighlightPath = Path.Combine(Directory, "highlight.json");
+            CheckStatePath = Path.Combine(Directory, "check.json");
         }
 
         public string Directory { get; }
@@ -32,6 +33,8 @@ namespace O_ComTool.Core.Config
         public string SettingsPath { get; }
 
         public string HighlightPath { get; }
+
+        public string CheckStatePath { get; }
 
         /**
          * @brief 确保目录和默认高亮文件存在
@@ -79,6 +82,38 @@ namespace O_ComTool.Core.Config
             System.IO.Directory.CreateDirectory(Directory);
             settings.ClampQuickSends();
             File.WriteAllText(SettingsPath, JsonSerializer.Serialize(settings, JsonOptions));
+        }
+
+        /**
+         * @brief 读取校验工具上次的状态，文件不存在或损坏时返回默认值
+         * @retval 校验工具状态
+         */
+        public CheckToolState LoadCheckState()
+        {
+            if (!File.Exists(CheckStatePath))
+            {
+                return new CheckToolState();
+            }
+
+            try
+            {
+                string json = File.ReadAllText(CheckStatePath);
+                return JsonSerializer.Deserialize<CheckToolState>(json, JsonOptions) ?? new CheckToolState();
+            }
+            catch (Exception)
+            {
+                return new CheckToolState();
+            }
+        }
+
+        /**
+         * @brief 保存校验工具状态
+         * @param state: 校验工具状态
+         */
+        public void SaveCheckState(CheckToolState state)
+        {
+            System.IO.Directory.CreateDirectory(Directory);
+            File.WriteAllText(CheckStatePath, JsonSerializer.Serialize(state, JsonOptions));
         }
 
         /**
