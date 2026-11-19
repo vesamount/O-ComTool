@@ -11,4 +11,6 @@
     <PackageReference Include="System.IO.Ports" Version="10.0.13" />
   </ItemGroup>
 
+  <!-- Check 目录下的 CrcModel / CrcCatalog / CrcCalculator 由 SDK 默认通配自动编译 -->
+
 </Project>

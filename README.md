@@ -19,7 +19,7 @@ O-Comtool 是一款简单易用的串口调试助手。当前版本用 .NET 10 W
 * 支持收发信息时间显示，自动换行，发送回显，轻松显示交互逻辑
 * 支持自动计数与重复发送，丢帧与否，一眼便知
 * 支持 `//` 报文注释，报文含义清晰可见
-* 支持报文校验和、异或、CRC16 Modbus、CRC32，报文组包快人一步
+* 支持报文校验和、异或，以及 CRC-4/5/6/7/8/16/32 共 27 种常用 CRC 模型（Modbus、CCITT、XMODEM、DNP 等），也支持自定义位宽、多项式、初值、异或值和输入/输出反转，结果显示 HEX、BIN 与字节序
 * 支持加载文件报文，预先导入报文
 * 接收区关键字高亮用 `%AppData%/O-ComTool/highlight.json` 配置，写法接近 VS Code 的 settings.json，保存后自动重新着色
 * 支持实时搜索，可以实时查找关键字，第一时间发现问题
@@ -29,6 +29,7 @@ O-Comtool 是一款简单易用的串口调试助手。当前版本用 .NET 10 W
 * 界面设置保存在 `%AppData%/O-ComTool/settings.json`，仍可导入、导出旧版 ini
 * 深色界面，右上角可切换浅色方案
 * 更有校验、HEX 格式化、ASCII 表等小工具
+* 校验小工具的 CRC 模型参数与 [metools.info 在线 CRC 校验工具](https://www.metools.info/code/c15.html) 一致
 
 # 软件截图
 
@@ -37,6 +38,12 @@ O-Comtool 是一款简单易用的串口调试助手。当前版本用 .NET 10 W
 ![O-ComTool V3.0 深色界面](docs/images/v3-dark-ui.png)
 
 深色为主题，右上角可切换浅色。左侧是串口、接收、发送三组设置，中间是接收区和发送框，右侧是可收起的快捷发送列表，底部状态栏显示串口状态与 TX/RX 计数。
+
+## 校验工具（V3.0）
+
+![校验工具](docs/images/v3-check-tool.png)
+
+工具 - 校验支持校验和、异或和 27 种常用 CRC 模型，可切换 HEX / ASCII 输入，结果显示 HEX、BIN 和高低字节序。
 
 ## 旧版界面（V2.1.1）
 
