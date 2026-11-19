@@ -127,6 +127,12 @@ namespace O_ComTool.App.ViewModels
         [ObservableProperty] private string _note = string.Empty;
         [ObservableProperty] private string _lastCheckTime = "2000-01-01 00:00:00";
         [ObservableProperty] private string _skipVersion = string.Empty;
+
+        /**
+         * @brief 快捷发送侧栏是否收起，由主窗口代码同步
+         */
+        public bool QuickPanelCollapsed { get; set; }
+
         [ObservableProperty] private string _receiveForeground1 = "#F8F8F2";
         [ObservableProperty] private string _receiveBackground1 = "#272822";
         [ObservableProperty] private string _sendForeground1 = "#F8F8F2";
@@ -199,6 +205,7 @@ namespace O_ComTool.App.ViewModels
             SendToFileEnable = settings.SendToFileEnable;
             SendToNewLineEnable = settings.SendToNewLineEnable;
             DisplayPlan1 = settings.DisplayPlan1;
+            QuickPanelCollapsed = settings.QuickPanelCollapsed;
             Note = settings.Note;
             LastCheckTime = settings.LastCheckTime;
             SkipVersion = settings.SkipVersion;
@@ -277,6 +284,7 @@ namespace O_ComTool.App.ViewModels
                 SendToFileEnable = SendToFileEnable,
                 SendToNewLineEnable = SendToNewLineEnable,
                 DisplayPlan1 = DisplayPlan1,
+                QuickPanelCollapsed = QuickPanelCollapsed,
                 Note = Note,
                 LastCheckTime = LastCheckTime,
                 SkipVersion = SkipVersion,
@@ -297,6 +305,14 @@ namespace O_ComTool.App.ViewModels
         }
 
         /**
+         * @brief 只保存 settings.json，不重载高亮
+         */
+        public void SaveSettings()
+        {
+            _store.SaveSettings(CaptureSettings());
+        }
+
+        /**
          * @brief 保存 settings.json，并让高亮开关与 highlight.json 一致
          */
         public void Save()
@@ -304,7 +320,7 @@ namespace O_ComTool.App.ViewModels
             HighlightFile highlight = _store.LoadHighlight();
             highlight.Enable = HighlightEnable;
             _store.SaveHighlight(highlight);
-            _store.SaveSettings(CaptureSettings());
+            SaveSettings();
             ReloadHighlight();
             HighlightReloaded?.Invoke();
         }

@@ -35,6 +35,7 @@ namespace O_ComTool.App
             _store = store;
             _viewModel = new MainViewModel(store, settings);
             DataContext = _viewModel;
+            ApplyQuickPanel(!_viewModel.QuickPanelCollapsed);
             BaudBox.ItemsSource = new[] { "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" };
             _colorizer.Engine = _viewModel.Highlight;
             ReceiveEditor.TextArea.TextView.LineTransformers.Add(_colorizer);
@@ -576,6 +577,17 @@ namespace O_ComTool.App
         private void ToggleQuick_Click(object sender, RoutedEventArgs e)
         {
             bool open = QuickPanel.Visibility != Visibility.Visible;
+            ApplyQuickPanel(open);
+            _viewModel.QuickPanelCollapsed = !open;
+            _viewModel.SaveSettings();
+        }
+
+        /**
+         * @brief 按展开状态显示快捷发送栏或侧边按钮
+         * @param open: true 展开快捷发送栏
+         */
+        private void ApplyQuickPanel(bool open)
+        {
             QuickPanel.Visibility = open ? Visibility.Visible : Visibility.Collapsed;
             QuickRail.Visibility = open ? Visibility.Collapsed : Visibility.Visible;
             QuickColumn.Width = open ? new GridLength(390) : GridLength.Auto;
