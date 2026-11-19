@@ -30,6 +30,7 @@ O-Comtool 是一款简单易用的串口调试助手。当前版本用 .NET 10 W
 * 深色界面，右上角可切换浅色方案
 * 更有校验、HEX 格式化、ASCII 表等小工具
 * 校验小工具的 CRC 模型参数与 [metools.info 在线 CRC 校验工具](https://www.metools.info/code/c15.html) 一致
+* 校验工具会记住上次使用的算法、HEX/ASCII 输入模式和自定义参数，状态保存在 `%AppData%/O-ComTool/check.json`
 
 # 软件截图
 

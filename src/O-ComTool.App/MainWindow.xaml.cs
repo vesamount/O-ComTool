@@ -20,6 +20,7 @@ namespace O_ComTool.App
     public partial class MainWindow : Window
     {
         private readonly MainViewModel _viewModel;
+        private readonly ConfigStore _store;
         private readonly ReceiveColorizer _colorizer = new();
         private readonly System.Windows.Forms.NotifyIcon _tray = new();
         private int _findIndex;
@@ -31,6 +32,7 @@ namespace O_ComTool.App
         public MainWindow(ConfigStore store, AppSettings settings)
         {
             InitializeComponent();
+            _store = store;
             _viewModel = new MainViewModel(store, settings);
             DataContext = _viewModel;
             BaudBox.ItemsSource = new[] { "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" };
@@ -637,7 +639,7 @@ namespace O_ComTool.App
 
         private void Check_Click(object sender, RoutedEventArgs e)
         {
-            new CheckWindow { Owner = this }.Show();
+            new CheckWindow(_store) { Owner = this }.Show();
         }
 
         private void Format_Click(object sender, RoutedEventArgs e)

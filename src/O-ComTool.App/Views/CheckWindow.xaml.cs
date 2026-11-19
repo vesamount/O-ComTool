@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using O_ComTool.Core.Check;
+using O_ComTool.Core.Config;
 using O_ComTool.Core.Text;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -14,17 +15,36 @@ namespace O_ComTool.App.Views
      */
     public partial class CheckWindow : Window
     {
+        private readonly ConfigStore _store;
+        private readonly CheckToolState _state;
         private bool _updating = true;
 
-        public CheckWindow()
+        public CheckWindow(ConfigStore store)
         {
             InitializeComponent();
+            _store = store;
+            _state = store.LoadCheckState();
+
             List<AlgorithmItem> algorithms = BuildAlgorithms();
             AlgorithmBox.ItemsSource = algorithms;
             WidthBox.ItemsSource = Enumerable.Range(1, 32).ToArray();
-            AlgorithmBox.SelectedItem = algorithms.First(item => item.Model?.Name == "CRC-16/MODBUS");
+
+            bool ascii = _state.Ascii;
+            AsciiMode.IsChecked = ascii;
+            HexMode.IsChecked = !ascii;
+            UpdateInputHint();
+
+            AlgorithmItem algorithm = algorithms.FirstOrDefault(item => item.Name == _state.Algorithm)
+                ?? algorithms.First(item => item.Model?.Name == "CRC-16/MODBUS");
+            AlgorithmBox.SelectedItem = algorithm;
+            if (algorithm.Kind == AlgorithmKind.Custom)
+            {
+                LoadCustomState();
+            }
+
             _updating = false;
             ApplyAlgorithmState();
+            Closing += (_, _) => SaveState();
         }
 
         private static List<AlgorithmItem> BuildAlgorithms()
@@ -47,6 +67,7 @@ namespace O_ComTool.App.Views
             }
 
             ApplyAlgorithmState();
+            SaveState();
         }
 
         private void ApplyAlgorithmState()
@@ -97,6 +118,47 @@ namespace O_ComTool.App.Views
             _updating = wasUpdating;
         }
 
+        private void LoadCustomState()
+        {
+            int width = _state.Width is >= 1 and <= 32 ? _state.Width : 16;
+            WidthBox.SelectedItem = width;
+            PolyBox.Text = string.IsNullOrWhiteSpace(_state.Poly) ? "8005" : _state.Poly;
+            InitBox.Text = string.IsNullOrWhiteSpace(_state.Init) ? "FFFF" : _state.Init;
+            XorOutBox.Text = string.IsNullOrWhiteSpace(_state.XorOut) ? "0000" : _state.XorOut;
+            RefInBox.IsChecked = _state.RefIn;
+            RefOutBox.IsChecked = _state.RefOut;
+        }
+
+        /**
+         * @brief 记住当前算法、输入模式和自定义参数
+         */
+        private void SaveState()
+        {
+            if (AlgorithmBox.SelectedItem is AlgorithmItem item)
+            {
+                _state.Algorithm = item.Name;
+                if (item.Kind == AlgorithmKind.Custom)
+                {
+                    _state.Width = WidthBox.SelectedItem is int width ? width : 16;
+                    _state.Poly = PolyBox.Text;
+                    _state.Init = InitBox.Text;
+                    _state.XorOut = XorOutBox.Text;
+                    _state.RefIn = RefInBox.IsChecked == true;
+                    _state.RefOut = RefOutBox.IsChecked == true;
+                }
+            }
+
+            _state.Ascii = AsciiMode.IsChecked == true;
+            try
+            {
+                _store.SaveCheckState(_state);
+            }
+            catch (Exception)
+            {
+                // 状态写入失败不影响校验计算
+            }
+        }
+
         private void InputMode_Changed(object sender, RoutedEventArgs e)
         {
             if (_updating)
@@ -104,10 +166,16 @@ namespace O_ComTool.App.Views
                 return;
             }
 
+            UpdateInputHint();
+            Calculate();
+            SaveState();
+        }
+
+        private void UpdateInputHint()
+        {
             InputHint.Text = AsciiMode.IsChecked == true
                 ? "ASCII：按 UTF-8 编码取字节，可直接输入中文。"
                 : "HEX：空格、逗号、0x 前缀均可，例如 01 03 00 00 00 0A。";
-            Calculate();
         }
 
         private void Width_Changed(object sender, SelectionChangedEventArgs e)
@@ -118,6 +186,7 @@ namespace O_ComTool.App.Views
             }
 
             Calculate();
+            SaveState();
         }
 
         private void ParamText_Changed(object sender, TextChangedEventArgs e)
@@ -138,11 +207,13 @@ namespace O_ComTool.App.Views
             }
 
             Calculate();
+            SaveState();
         }
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
             Calculate();
+            SaveState();
         }
 
         private void Input_KeyDown(object sender, KeyEventArgs e)
